@@ -1,0 +1,6 @@
+emp_id,name,age,salary,bonus,department,is_adult,high_salary
+1,Alice,25,30000,5000,IT,True,False
+3,Charlie,40,60000,10000,Finance,True,True
+5,Eva,29,50000,8000,Finance,True,False
+6,Frank,22,20000,2000,Support,True,False
+8,Henry,45,70000,12000,Finance,True,True
