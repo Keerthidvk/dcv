@@ -1,0 +1,5 @@
+MaterialType,Location,total_weight,total_gold,avg_salary
+GO,Chennai,430.0,2350000.0,41666.666666666664
+GO,Mumbai,200.0,1000000.0,50000.0
+ST,Chennai,50.0,200000.0,25000.0
+ST,Mumbai,75.0,300000.0,35000.0

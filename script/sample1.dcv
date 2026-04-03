@@ -1,0 +1,28 @@
+MODE "tolerant"
+
+LOAD "script/data1.csv"
+
+CAST "FIN_WT" TO float
+CAST "FIN_GOLD_VAL" TO float
+CAST "Salary" TO float
+
+ADD_COLUMN "is_gold" =
+    IF MaterialType == "GO"
+    THEN 1
+    ELSE 0
+    
+ADD_COLUMN "weight_ratio" =
+    IF NOT ISNULL(FIN_GOLD_VAL)
+    THEN ROUND(FIN_GOLD_VAL / 100000, 2)
+    ELSE 0
+
+VALIDATE Salary > 20000
+
+GROUP_BY MaterialType, Location
+
+AGGREGATE:
+    SUM FIN_WT AS total_weight
+    SUM FIN_GOLD_VAL AS total_gold
+    AVG Salary AS avg_salary
+
+SAVE "script/summary.csv"

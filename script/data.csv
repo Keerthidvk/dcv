@@ -1,0 +1,9 @@
+emp_id,name,age,salary,bonus,department
+1, Alice ,25,30000,5000,IT
+2,Bob,17,15000,,Support
+3,Charlie,40,60000,10000,Finance
+4,David, ,45000,7000,IT
+5,Eva,29,50000,8000,Finance
+6,Frank,22,20000,2000,Support
+7,Grace,35,abc,9000,IT
+8,Henry,45,70000,12000,Finance

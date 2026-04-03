@@ -1,0 +1,20 @@
+MODE "tolerant"
+
+LOAD "script/data.csv"
+
+TRIM "name"
+REMOVE_NULLS "age"
+
+CAST "age" TO int
+CAST "salary" TO int
+CAST "bonus" TO int
+
+ADD_COLUMN "is_adult" = age > 18
+ADD_COLUMN "high_salary" = salary > 50000
+
+VALIDATE age > 18
+VALIDATE salary > 10000
+
+SAVE "output_data.csv"
+
+

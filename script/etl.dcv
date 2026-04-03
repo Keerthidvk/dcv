@@ -1,0 +1,80 @@
+MODE "tolerant"
+# Load warehouse report
+LOAD "script/ROS.txt" DELIMITER "|" SKIPROWS 2
+
+
+# ----------------------------
+# Basic Cleaning
+# ----------------------------
+
+REMOVE_NULLS "SNo"
+
+TRIM "Location"
+TRIM "Item Description"
+
+CAST "Stk Qty1" TO float
+CAST "Stk Qty2" TO float
+CAST "Value" TO float
+CAST "Purity" TO float
+
+
+# ----------------------------
+# Remove unwanted records
+# ----------------------------
+
+FILTER "Orgn Code" != "BTQ"
+
+
+# ----------------------------
+# Derived Calculations
+# ----------------------------
+
+ADD_COLUMN FIN_WT =
+    IF "Material Type" == "GO"
+    THEN "Stk Qty2"
+    ELSE 0
+
+
+ADD_COLUMN FIN_CTS =
+    IF "UOM1" == "CTS"
+    THEN "Stk Qty1"
+    ELSE 0
+
+
+ADD_COLUMN FIN_GOLD_VAL =
+    IF "Material Type" == "GO"
+    THEN ("FIN_WT" * "Value") / 10000000
+    ELSE 0
+
+
+ADD_COLUMN FIN_STN_VAL =
+    IF "UOM1" == "CTS"
+    THEN ("Stk Qty1" * "Value") / 10000000
+    ELSE 0
+
+
+ADD_COLUMN PURE_WT_KGS =
+    IF "Material Type" == "GO"
+    THEN ((FIN_WT / 99.9) * "Purity") / 1000
+    ELSE 0
+
+
+# ----------------------------
+# Aggregation
+# ----------------------------
+
+GROUP_BY "Orgn Code", "Inv Code", "Whse Code", Location, "Material Type"
+
+AGGREGATE:
+    SUM FIN_WT AS TOTAL_WEIGHT
+    SUM FIN_CTS AS TOTAL_CARATS
+    SUM FIN_GOLD_VAL AS GOLD_VALUE
+    SUM FIN_STN_VAL AS STONE_VALUE
+    SUM PURE_WT_KGS AS PURE_GOLD_KG
+
+
+# ----------------------------
+# Save result
+# ----------------------------
+
+SAVE "roe_inventory_summary.csv"
